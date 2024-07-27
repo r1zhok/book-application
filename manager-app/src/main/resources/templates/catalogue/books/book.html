@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${book.name}]] &ndash; Booking</title>
+</head>
+<body>
+<a data-th-href="@{/catalogue/books/list}">&larr; До списку книжок</a>
+<h1 data-th-text="${book.name}"></h1>
+<ul>
+    <li><strong>ID</strong>: <span data-th-text="${book.id}"></span></li>
+    <li><strong>Назва</strong>: <span data-th-text="${book.name}"></span></li>
+    <li><strong>Автор</strong>: <span data-th-text="${book.author}"></span></li>
+    <li><strong>Опис</strong>: <span data-th-text="${book.details}"></span></li>
+</ul>
+<a data-th-href="@{/catalogue/books/{bookId}/edit(bookId=${book.id})}">Изменить</a>
+<form method="post" data-th-action="@{/catalogue/books/{bookId}/delete(bookId=${book.id})}">
+    <button type="submit">Видалити</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редагування книжки &laquo;[[${book.name}]]&raquo; &ndash; Booking</title>
+</head>
+<body>
+<a data-th-href="@{/catalogue/books/{bookId}(bookId=${book.id})}">&larr; До книжки</a>
+<h1>Редагування книжки &laquo;[[${book.name}]]</h1>
+<div data-th-if="${errors}">
+    <h2>Допущені помилки</h2>
+    <ul>
+        <li data-th-each="error: ${errors}" data-th-text="${error}"></li>
+    </ul>
+</div>
+<form method="post" data-th-action="@{/catalogue/books/{bookId}/edit(bookId=${book.id})}">
+    <label>
+        Назва:<br>
+        <input type="text" name="name" data-th-value="${payload != null ? payload.name : book.name}">
+    </label><br>
+    <label>
+        Автор:<br>
+        <input type="text" name="author" data-th-value="${payload != null ? payload.author : book.author}">
+    </label>
+    <label>
+        Опис:<br>
+        <textarea name="details" data-th-text="${payload != null ? payload.details : book.details}"></textarea>
+    </label><br>
+    <button type="submit">Редагувати</button>
+</form>
+</body>
+</html>

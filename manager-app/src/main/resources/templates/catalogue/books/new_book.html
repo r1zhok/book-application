@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Нова книжка &ndash; Booking</title>
+</head>
+<body>
+<a data-th-href="@{/catalogue/books/list}">&larr; До списку книжок</a>
+<h1>Нова книжка</h1>
+<div data-th-if="${errors}">
+    <h2>Допущені помилки</h2>
+    <ul>
+        <li data-th-each="error: ${errors}" data-th-text="${error}"></li>
+    </ul>
+</div>
+<form method="post" data-th-action="@{/catalogue/books/create}">
+    <label>
+        Назва:<br>
+        <input type="text" name="name" data-th-value="${payload?.name}">
+    </label><br>
+    <label>
+        Автор:<br>
+        <input type="text" name="author" data-th-value="${payload?.author}">
+    </label>
+    <label>
+        Опис:<br>
+        <textarea name="details" data-th-text="${payload?.details}"></textarea>
+    </label><br>
+    <button type="submit">Створити</button>
+</form>
+</body>
+</html>

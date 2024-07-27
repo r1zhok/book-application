@@ -1,0 +1,6 @@
+spring:
+  sql:
+    init:
+       always
+  flyway:
+    enabled: false

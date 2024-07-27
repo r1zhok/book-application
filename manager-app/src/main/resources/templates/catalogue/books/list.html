@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список товаров &ndash; Сельмаг</title>
+</head>
+<body>
+<a data-th-href="@{/catalogue/books/create}">+ Створити книжку</a>
+<h1>Список книжок</h1>
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Книжка</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="book : ${books}">
+        <td data-th-text="${book.id}"></td>
+        <td>
+            <a data-th-href="@{/catalogue/books/{bookId}(bookId=${book.id})}"
+               data-th-text="${book.name}"></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
