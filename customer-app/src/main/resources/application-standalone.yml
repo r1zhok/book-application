@@ -1,0 +1,25 @@
+server:
+  port: 8083
+
+books:
+  services:
+    catalogue:
+      uri: http://localhost:8081
+    feedback:
+      uri: http://localhost:8084
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/master
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: customer-app
+            client-secret: QoOCOA4Jr09vxiGOH6K8aIfAfnCj1YR2
+            scope:
+              - openid
+              - view_catalogue

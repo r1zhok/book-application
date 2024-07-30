@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вибрані книжки &ndash; Booking</title>
+</head>
+<body>
+<a data-th-href="@{/customer/books/list}">Всі книжки</a>
+<h1>Вибрані книжки</h1>
+<form>
+    <label>Фільтр: <input type="text" name="filter" data-th-value="${filter}"> <button type="submit">Пошук</button></label>
+</form>
+<ul>
+    <li data-th-each="book : ${books}">
+        <strong>
+            <a data-th-text="${book.name}"
+               data-th-href="@{/customer/books/{bookId}(bookId=${book.id})}"></a>
+        </strong>
+        <p data-th-text="${book.author}"></p>
+        <p data-th-text="${book.details}"></p>
+    </li>
+</ul>
+</body>
+</html>

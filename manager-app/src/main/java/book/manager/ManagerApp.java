@@ -6,6 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ManagerApp {
     public static void main(String[] args) {
-        SpringApplication.run(ManagerApp.class, "--spring.profiles.active=standalone");
+        SpringApplication.run(ManagerApp.class, args);
     }
 }

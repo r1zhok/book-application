@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${book.name}]] &ndash; Booking</title>
+</head>
+<body>
+<a data-th-href="@{/customer/books/list}">&larr; До списку книжок</a>
+<h1 data-th-text="${book.name}"></h1>
+<p data-th-text="${book.author}"></p>
+<p data-th-text="${book.details}"></p>
+<form method="post" data-th-action="@{/customer/books/{bookId}/add-to-favourites(bookId=${book.id})}"
+      data-th-if="${!inFavourite}">
+    <button type="submit">Добавити у вибране</button>
+</form>
+<form method="post" data-th-action="@{/customer/books/{bookId}/remove-from-favourites(bookId=${book.id})}"
+      data-th-if="${inFavourite}">
+    <button type="submit">Видалити з вибраного</button>
+</form>
+<h2>Отзывы</h2>
+<div data-th-if="${errors}">
+    <h3></h3>
+    <ul>
+        <li data-th-each="error : ${errors}" data-th-text="${error}"></li>
+    </ul>
+</div>
+<form method="post" data-th-action="@{/customer/books/{bookId}/create-review(bookId=${book.id})}">
+    <label><input type="radio" name="rating" value="1"> 1</label>
+    <label><input type="radio" name="rating" value="2"> 2</label>
+    <label><input type="radio" name="rating" value="3"> 3</label>
+    <label><input type="radio" name="rating" value="4"> 4</label>
+    <label><input type="radio" name="rating" value="5"> 5</label>
+    <br>
+    <label>
+        Відгук:<br>
+        <textarea name="review"></textarea>
+    </label><br>
+    <button type="submit">Відправити відгук</button>
+</form>
+<div data-th-each="review : ${reviews}">
+    <h3>[[${review.rating}]]*</h3>
+    <p data-th-text="${review.review}"></p>
+</div>
+</body>
+</html>
