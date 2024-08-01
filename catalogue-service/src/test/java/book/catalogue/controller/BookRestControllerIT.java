@@ -2,11 +2,15 @@ package book.catalogue.controller;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.operation.preprocess.HeadersModifyingOperationPreprocessor;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,6 +20,10 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Locale;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@ExtendWith(RestDocumentationExtension.class)
 class BookRestControllerIT {
 
     @Autowired
@@ -48,7 +58,16 @@ class BookRestControllerIT {
                                         {"id":  1, "name":  "Гарік Потер", "author": "хз", "details": "норм"}
                                         """
                         )
-                );
+                ).andDo(document("catalogue/books/find_all",
+                        preprocessResponse(prettyPrint(),
+                                new HeadersModifyingOperationPreprocessor().remove("Vary")),
+                        responseFields(
+                                fieldWithPath("id").description("Ідентифікатор книжки").type("long"),
+                                fieldWithPath("name").description("Назва книжки").type("string"),
+                                fieldWithPath("author").description("Автор книжки").type("string"),
+                                fieldWithPath("details").description("Опис книжки").type("string")
+                        )
+                ));
     }
 
     @Test
@@ -81,8 +100,8 @@ class BookRestControllerIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         """
-                                {"name":  "idk", "author":  "idk", "details": "idk"}
-                        """
+                                        {"name":  "idk", "author":  "idk", "details": "idk"}
+                                """
                 )
                 .with(jwt().jwt(builder -> builder.claim("scope", "edit_catalogue")));
 
@@ -100,8 +119,8 @@ class BookRestControllerIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         """
-                                {"name":  null, "author":  null, "details": "idk"}
-                        """
+                                        {"name":  null, "author":  null, "details": "idk"}
+                                """
                 )
                 .with(jwt().jwt(builder -> builder.claim("scope", "edit_catalogue")));
 
@@ -118,8 +137,8 @@ class BookRestControllerIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         """
-                                {"name":  "idk", "author":  "idk", "details": "idk"}
-                        """
+                                        {"name":  "idk", "author":  "idk", "details": "idk"}
+                                """
                 )
                 .with(jwt().jwt(builder -> builder.claim("scope", "edit_catalogue")));
 
@@ -136,8 +155,8 @@ class BookRestControllerIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         """
-                               {"name":  "idk", "author":  "idk", "details": "idk"}
-                        """
+                                       {"name":  "idk", "author":  "idk", "details": "idk"}
+                                """
                 )
                 .with(jwt());
 

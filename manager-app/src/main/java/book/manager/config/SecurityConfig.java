@@ -23,8 +23,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(auth ->
-                        auth.anyRequest().hasRole("MANAGER"))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .anyRequest().hasRole("MANAGER"))
                 .oauth2Login(Customizer.withDefaults())
                 .oauth2Client(Customizer.withDefaults())
                 .build();

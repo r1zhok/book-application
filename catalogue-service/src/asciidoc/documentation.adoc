@@ -1,0 +1,12 @@
+= REST API каталога
+:toc: right
+
+== REST API книжки
+
+=== Отримання книжки
+
+.Тіло відповіді
+include::{snippets}/catalogue/books/find_all/response-body.adoc[]
+
+.Деталі відповіді
+include::{snippets}/catalogue/books/find_all/response-fields.adoc[]

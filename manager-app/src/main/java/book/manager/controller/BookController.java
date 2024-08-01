@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @Controller
-@RequestMapping(("catalogue/books/{bookId:\\d+}"))
 @RequiredArgsConstructor
+@RequestMapping(("catalogue/books/{bookId:\\d+}"))
 public class BookController {
 
     private final BooksRestClient booksRestClient;

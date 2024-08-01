@@ -5,12 +5,15 @@ import org.book.feedback.entity.BookReviewEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import reactor.core.publisher.Mono;
@@ -18,11 +21,18 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.*;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt;
 
 @Slf4j
 @SpringBootTest
+@AutoConfigureRestDocs
 @AutoConfigureWebTestClient
+@ExtendWith(RestDocumentationExtension.class)
 class BookReviewsRestControllerIT {
 
     @Autowired
@@ -97,7 +107,27 @@ class BookReviewsRestControllerIT {
                 .expectBody().json(
                         """
                         {"bookId":  1, "rating":  5, "review":"...", "userId": "user-tester"}
-                        """).jsonPath("$.id").exists();
+                        """).jsonPath("$.id").exists()
+                .consumeWith(document("feedback/book_reviews/create_book_review",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("bookId").type("long").description("Ідентифікатор рев'ю для книжки"),
+                                fieldWithPath("rating").type("int").description("Оціека книжки"),
+                                fieldWithPath("review").type("string").description("Рев'ю книжки")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type("uuid").description("Ідентифікатор рев'ю"),
+                                fieldWithPath("bookId").type("long").description("Ідентифікатор книжки"),
+                                fieldWithPath("rating").type("int").description("Оціека"),
+                                fieldWithPath("review").type("string").description("Відгук"),
+                                fieldWithPath("userId").type("string").description("Ідентифікатор користувача")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION)
+                                        .description("Посилання на створений відгук книжки")
+                        )
+                ));
     }
 
     @Test

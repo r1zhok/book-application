@@ -68,7 +68,11 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-webtestclient</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

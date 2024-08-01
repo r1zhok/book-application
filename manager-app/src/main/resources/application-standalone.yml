@@ -28,3 +28,12 @@ spring:
 logging:
   level:
     web: debug
+
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: manager-app-swagger-ui
+      use-pkce-with-authorization-code-grant: true
+
+keycloak:
+  uri: http://localhost:8082

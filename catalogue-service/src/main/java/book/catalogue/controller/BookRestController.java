@@ -3,8 +3,18 @@ package book.catalogue.controller;
 import book.catalogue.controller.payload.NewBookPayload;
 import book.catalogue.entity.BookEntity;
 import book.catalogue.service.BooksService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.StringToClassMapItem;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -26,14 +36,81 @@ public class BookRestController {
     }
 
     @GetMapping
+    @Operation(
+            security = @SecurityRequirement(name = "keycloak"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            headers = @Header(name = "Content-Type", description = "Тип даних"),
+                            content = {
+                                    @Content(
+                                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                            schema = @Schema(
+                                                    type = "object",
+                                                    properties = {
+                                                            @StringToClassMapItem(key = "id", value = Long.class),
+                                                            @StringToClassMapItem(key = "name", value = String.class),
+                                                            @StringToClassMapItem(key = "author", value = String.class),
+                                                            @StringToClassMapItem(key = "details", value = String.class)
+                                                    }
+                                            )
+                                    )
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            headers = @Header(name = "Content-Type", description = "Тип даних"),
+                            content = {
+                                    @Content(
+                                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                                            schema = @Schema(
+                                                    type = "object",
+                                                    properties = {
+                                                            @StringToClassMapItem(key = "exception",
+                                                                    value = String.class)
+                                                    }
+                                            )
+                                    )
+                            }
+                    )
+            }
+    )
     public BookEntity findProduct(@ModelAttribute("book") BookEntity book) {
         return book;
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateProduct(@PathVariable("bookId") Long bookId,
-                                           @Valid @RequestBody NewBookPayload payload,
-                                           BindingResult bindingResult) throws BindException {
+    @Operation(
+            summary = "Оновлює дані книги",
+            description = "Оновлює інформацію про книгу за заданим ідентифікатором книги. Для оновлення потрібні дані, що передаються в тілі запиту.",
+            security = @SecurityRequirement(name = "keycloak"),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Успішне оновлення даних книги"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Помилка валідації запиту",
+                            content = @Content(
+                                    mediaType = "application/problem+json",
+                                    schema = @Schema(
+                                            type = "object",
+                                            properties = {
+                                                    @StringToClassMapItem(key = "exception",
+                                                            value = String.class)
+                                            }
+                                    )
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<?> updateProduct(
+            @Parameter(description = "Ідентифікатор книги, що оновлюється")
+            @PathVariable("bookId") Long bookId,
+            @Valid @RequestBody NewBookPayload payload,
+            BindingResult bindingResult
+    ) throws BindException {
         if (bindingResult.hasErrors()) {
             if (bindingResult instanceof BindException exception) {
                 throw exception;
