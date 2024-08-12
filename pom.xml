@@ -14,6 +14,8 @@
         <module>catalogue-service</module>
         <module>customer-app</module>
         <module>feedback-service</module>
+        <module>admin-server</module>
+        <module>eureka-server</module>
     </modules>
     <version>24.07.11-SNAPSHOT</version>
     <name>book-magazine-application Maven Webapp</name>
@@ -24,6 +26,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>3.2.3</spring-boot.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -32,6 +35,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>

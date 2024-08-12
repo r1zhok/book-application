@@ -1,25 +1,36 @@
 server:
   port: 8083
-
 books:
   services:
     catalogue:
       uri: http://localhost:8081
     feedback:
       uri: http://localhost:8084
-
 spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8085
+        instance:
+          name: customer-app
+          service-host-type: ip
+        enabled: true
   security:
     oauth2:
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8082/realms/master
+            issuer-uri: http://localhost:8082/realms/book-app
             user-name-attribute: preferred_username
         registration:
           keycloak:
             client-id: customer-app
-            client-secret: QoOCOA4Jr09vxiGOH6K8aIfAfnCj1YR2
+            client-secret: Q7tsHJmWs4PtvFAtoCEydYAbx1IHkREk
             scope:
               - openid
               - view_catalogue
+  application:
+    name: book-customer-app
+eureka:
+  client:
+    enabled: false

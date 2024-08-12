@@ -1,0 +1,37 @@
+server:
+  port: 8761
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            user-name-attribute: preferred_username
+            issuer-uri: http://localhost:8082/realms/book-app
+        registration:
+          keycloak:
+            client-id: eureka-server
+            client-secret: Ja0EObtKkt5UMKtuMpobZS5zLNLzRTqm
+            authorization-grant-type: client_credentials
+            scope:
+              - openid
+          login:
+            provider: keycloak
+            client-id: eureka-server
+            client-secret: Ja0EObtKkt5UMKtuMpobZS5zLNLzRTqm
+            scope:
+              - openid
+              - microprofile-jwt
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/book-app
+  application:
+    name: book-eureka-server

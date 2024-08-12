@@ -1,8 +1,15 @@
 spring:
+  boot:
+    admin:
+      client:
+        instance:
+          name: catalogue-service
+          service-host-type: ip
+        url: http://localhost:8085
   datasource:
-    url: jdbc:mysql://localhost:3306/catalogue
-    username: root
-    password: root
+    url: jdbc:mysql://localhost:3306/catalogue-db
+    username: catalogue
+    password: catalogue
   flyway:
     schemas:
       - public
@@ -19,26 +26,45 @@ spring:
   sql:
     init:
       mode: always
-
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8082/realms/master
-
+          issuer-uri: http://localhost:8082/realms/book-app
+      client:
+        registration:
+          keycloak:
+            client-id: catalogue-service-metrics-client
+            client-secret: XI430bLu4gbUQN2jhRWENriCgNrWYR3x
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/book-app
 server:
   port: 8081
-
 logging:
   level:
     sql: info
     web: debug
-
 springdoc:
   swagger-ui:
     oauth:
       client-id: catalogue-service-swagger-ui
       use-pkce-with-authorization-code-grant: true
-
 keycloak:
   uri: http://localhost:8082
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    enabled: false

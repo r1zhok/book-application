@@ -1,0 +1,71 @@
+book:
+  service:
+    catalogue:
+      uri: lb://book-catalogue-service
+      registration-id: keycloak
+server:
+  port: 8080
+spring:
+  boot:
+    admin:
+      client:
+        enabled: false
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/book-app
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: manager-app
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+              - view_catalogue
+              - edit_catalogue
+              - microprofile-jwt
+          metrics:
+            provider: keycloak
+            client-id: manager-app
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+          discovery:
+            provider: keycloak
+            client-id: manager-app
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
+            authorization-grant-type: client_credentials
+            scope:
+              - discovery
+  application:
+    name: book-manager-app
+logging:
+  level:
+    web: debug
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: manager-app-swagger-ui
+      use-pkce-with-authorization-code-grant: true
+keycloak:
+  uri: http://localhost:8082
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

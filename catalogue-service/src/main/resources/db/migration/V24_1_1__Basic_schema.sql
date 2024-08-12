@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS catalogue;
+create database if not exists catalogue;
 
 CREATE TABLE IF NOT EXISTS catalogue.t_book
 (

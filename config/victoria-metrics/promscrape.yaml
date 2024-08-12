@@ -1,0 +1,15 @@
+scrape_configs:
+  - job_name: book_admin_service
+    static_configs:
+      - targets: ['http://host.docker.internal:8085']
+        labels:
+          application: book-admin-service
+    metrics_path: /actuator/prometheus
+    oauth2:
+      client_id: victoria-metrics
+      client_secret: 9Y1o9vK0obmKXbKYd84Cq83Z0eRXevQs
+      token_url: http://172.17.0.1:8082/realms/book-app/protocol/openid-connect/token
+      scopes:
+        - metrics
+      endpoint_params:
+        grant_type: client_credentials

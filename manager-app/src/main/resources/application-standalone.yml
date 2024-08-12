@@ -3,27 +3,35 @@ book:
     catalogue:
       uri: http://localhost:8081
       registration-id: keycloak
-
 server:
   port: 8080
-
 spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8085
+        instance:
+          name: manager-app
+          service-host-type: ip
+        enabled: true
   security:
     oauth2:
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8082/realms/master
+            issuer-uri: http://localhost:8082/realms/book-app
             user-name-attribute: preferred_username
         registration:
           keycloak:
             client-id: manager-app
-            client-secret: biZjoGFkmCNOkF29PM1E6UdzHA6bP2Hy
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
             scope:
               - openid
               - view_catalogue
               - edit_catalogue
               - microprofile-jwt
+  application:
+    name: book-manager-app
 
 logging:
   level:
@@ -37,3 +45,17 @@ springdoc:
 
 keycloak:
   uri: http://localhost:8082
+
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    enabled: false

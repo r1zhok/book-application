@@ -1,0 +1,50 @@
+server:
+  port: 8085
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/book-app
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/book-app
+        registration:
+          keycloak:
+            client-id: admin-service
+            client-secret: CWYymGxXF3mTxoksv0vKI8EJVGasp6gh
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics
+          login:
+            provider: keycloak
+            client-id: admin-service
+            client-secret: CWYymGxXF3mTxoksv0vKI8EJVGasp6gh
+            authorization-grant-type: authorization_code
+            scope:
+              - metrics
+              - openid
+              - microprofile-jwt
+          discovery:
+            provider: keycloak
+            client-id: admin-service
+            client-secret: CWYymGxXF3mTxoksv0vKI8EJVGasp6gh
+            authorization-grant-type: client_credentials
+            scope:
+              - discovery
+  application:
+    name: book-admin-server
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

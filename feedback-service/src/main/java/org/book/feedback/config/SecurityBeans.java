@@ -13,11 +13,15 @@ public class SecurityBeans {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
-                .authorizeExchange(configure -> configure.anyExchange().authenticated())
+                .authorizeExchange(configure -> configure
+                        .pathMatchers("/actuator/**").hasAuthority("SCOPE_metrics")
+                        .anyExchange().authenticated()
+                )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .oauth2ResourceServer(customizer ->
                         customizer.jwt(Customizer.withDefaults()))
+                .oauth2Client(Customizer.withDefaults())
                 .build();
     }
 }

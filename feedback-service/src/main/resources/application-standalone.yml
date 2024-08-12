@@ -1,7 +1,13 @@
 server:
   port: 8084
-
 spring:
+  boot:
+    admin:
+      client:
+        instance:
+          name: feedback-service
+          service-host-type: ip
+        url: http://localhost:8085
   data:
     mongodb:
       uri: mongodb://localhost:27017/feedback
@@ -9,4 +15,30 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8082/realms/master
+          issuer-uri: http://localhost:8082/realms/book-app
+      client:
+        registration:
+          keycloak:
+            client-id: feedback-service-metrics-client
+            client-secret: 1QFf97eP51V7YNmZTlco8HOi6UU8lJ8j
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_service
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/book-app
+  application:
+    name: book-feedback-service
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    enabled: false
