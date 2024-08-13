@@ -1,11 +1,8 @@
-server:
-  port: 8083
-books:
-  services:
+book:
+  service:
     catalogue:
       uri: lb://book-catalogue-service
-    feedback:
-      uri: lb://book-feedback-service
+      registration-id: keycloak
 spring:
   boot:
     admin:
@@ -20,28 +17,40 @@ spring:
             user-name-attribute: preferred_username
         registration:
           keycloak:
-            client-id: customer-app
-            client-secret: Q7tsHJmWs4PtvFAtoCEydYAbx1IHkREk
+            client-id: manager-app
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
             authorization-grant-type: authorization_code
             scope:
               - openid
               - view_catalogue
+              - edit_catalogue
+              - microprofile-jwt
           metrics:
             provider: keycloak
-            client-id: customer-app
-            client-secret: Q7tsHJmWs4PtvFAtoCEydYAbx1IHkREk
+            client-id: manager-app
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
             authorization-grant-type: client_credentials
             scope:
               - metrics_server
           discovery:
             provider: keycloak
-            client-id: customer-app
-            client-secret: Q7tsHJmWs4PtvFAtoCEydYAbx1IHkREk
+            client-id: manager-app
+            client-secret: gVssiaXM1k8Bq72M5rPbQG8IzsACNdfD
             authorization-grant-type: client_credentials
             scope:
               - discovery
   application:
-    name: book-customer-app
+    name: book-manager-app
+logging:
+  level:
+    web: debug
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: manager-app-swagger-ui
+      use-pkce-with-authorization-code-grant: true
+keycloak:
+  uri: http://localhost:8082
 eureka:
   client:
     service-url:

@@ -1,0 +1,10 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: book-catalogue-service
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    config:
+      uri: http://admin:password@localhost:8888

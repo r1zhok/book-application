@@ -1,0 +1,10 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: book-config-server
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: file:///C:/Users/Lenovo/IdeaProjects/book-magazine-application/config/cloud/{application}/{profile}

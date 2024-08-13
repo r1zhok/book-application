@@ -1,0 +1,10 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: book-feedback-service
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    config:
+      uri: http://admin:password@localhost:8888
