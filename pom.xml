@@ -17,6 +17,7 @@
         <module>admin-server</module>
         <module>eureka-server</module>
         <module>config-server</module>
+        <module>api-gateway</module>
     </modules>
     <version>24.07.11-SNAPSHOT</version>
     <name>book-magazine-application Maven Webapp</name>

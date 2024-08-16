@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: catalogue-service-route
+          uri: http://localhost:8081
+          predicates:
+            - Host=catalogue.api.book.org.127.0.0.1.nip.io
+server:
+  port: 8086
+  forward-headers-strategy: framework

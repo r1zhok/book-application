@@ -46,6 +46,6 @@ public class BooksService {
 
     @Transactional
     public void deleteProduct(Long id) {
-        this.repository.deleteById(id);
+        this.repository.findById(id);
     }
 }
